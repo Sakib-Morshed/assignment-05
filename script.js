@@ -27,19 +27,23 @@ for (const CallButton of CallButtons) {
 
     const callTitle =
       this.closest(".card").querySelector(".callTitle").innerText;
-    const callSubtitle =
+    let callSubtitle =
       this.closest(".card").querySelector(".callSubtitle").innerText;
     alert(`📞 Calling ${callTitle} ${callSubtitle}...`);
 
     gold.innerText = goldCount - 20;
 
-    let cardHistory = getId("card-history");
+    let cardHistory = getId("clear-history");
     let createHistory = document.createElement("div");
+    let currentTime = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     createHistory.innerHTML = `
-    <div id="clear-history" class="bg-[#f4f0f0] p-2 md:p-4 mx-2 md:mx-4 rounded-lg mb-2">
+    <div class="bg-[#f4f0f0] p-2 md:p-4 mx-2 md:mx-4 rounded-lg mb-2">
             <div class="md:flex justify-between items-center">
               <h2>${callTitle}</h2>
-              <span>10:09</span>
+              <span>${currentTime}</span>
             </div>
 
             <span>${callSubtitle}</span>
@@ -50,7 +54,22 @@ for (const CallButton of CallButtons) {
   });
 }
 
+// clear history button
 getId("clear-btn").addEventListener("click", function () {
   let clearHistory = getId("clear-history");
   clearHistory.innerHTML = "";
 });
+
+// copy button
+const copyButtons = document.getElementsByClassName("copy-btn");
+
+for (const copyButton of copyButtons) {
+  copyButton.addEventListener("click", function () {
+    let callSubtitle =
+      this.closest(".card").querySelector(".callSubtitle").innerText;
+    navigator.clipboard.writeText(callSubtitle);
+    alert(`নাম্বার কপি হয়েছে ${callSubtitle}`);
+    let copyCount = getId("copy-count");
+    copyCount.innerText = Number(copyCount.innerText) + 1;
+  });
+}
